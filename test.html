@@ -4,15 +4,184 @@
     <meta charset="UTF-8">
 
     <title>justForTest</title>
+    <style type="text/css">
+        body
+        {
+            background-color: white;
+            color: black;
+            line-height: 140%;
+        }
+        #idTable
+        {
+            background-color: #DDD;
+            border: solid #CCC;
+            left: 100px;
+            position: fixed;
+            top: 65px;
+            width: 46%;
+        }
+    </style>
 </head>
-<body>
+<body onload="document.forms[0].reset(); init();">
 <button id="test" name = "sss">snowTest</button>
 <h3 id = "out4">该文本用于显示OS等信息</h3>
 <h3 id = "out1">该文本用于显示mousemove</h3>
 <h3 id = "out2">该文本用于显示mouseclick</h3>
 <h3 id = "out3">该文本用于显示当前鼠标位置</h3>
 <h3 id = "out5">该文本用于显示鼠标拖动选择区域</h3>
+<p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
+<p>huewi</p><p>huewi</p>
 
+
+
+<form action="">
+    <table id="idTable">
+        <col width="3*">
+        <col width="*">
+        <tr>
+            <td id="twpxo"><span>用于显示OS、浏览器及其版本</span></td>
+            <td align="center"><textarea id="os" cols="30"></textarea></td>
+        </tr>
+        <tr>
+            <td id="twpxo"><span>用于显示指针在控件上的时间与控件的信息</span></td>
+            <td align="center"><textarea id="mousemove" cols="30"></textarea></td>
+        </tr>
+        <tr>
+            <td id="twpxo"><span>用于显示指针点击控件上的时间与控件的信息</span></td>
+            <td align="center"><textarea id="mouseclick" cols="30"></textarea></td>
+        </tr>
+        <tr>
+            <td id="twpxo"><span>用于显示当前指针位置</span></td>
+            <td align="center"><span id="mousesite"></span></td>
+        </tr>
+        <tr>
+            <td id="twpxo"><span>用于显示鼠标选中框的范围</span></td>
+            <td align="center"><textarea id="mousebound" cols="30"></textarea></td>
+        </tr>
+        <tr id="trwpxo">
+            <td id="twpxo"><span class=
+                                         "Netscape6">window.pageXOffset</span></td>
+
+            <td align="center"><input size="4" maxlength="4" id="wpxo"></td>
+        </tr>
+
+        <tr id="trwpyo">
+            <td id="twpyo"><span class=
+                                         "Netscape6">window.pageYOffset</span></td>
+
+            <td align="center"><input size="4" maxlength="4" id="wpyo"></td>
+        </tr>
+
+        <tr>
+            <td id="tddsl"><span class=
+                                         "Netscape6">document.documentElement.scrollLeft</span></td>
+
+            <td align="center"><input size="4" maxlength="4" id="ddsl"></td>
+        </tr>
+
+        <tr>
+            <td id="tddst"><span class=
+                                         "Netscape6">document.documentElement.scrollTop</span></td>
+
+            <td align="center"><input size="4" maxlength="4" id="ddst"></td>
+        </tr>
+
+        <tr>
+            <td colspan="2">Current event type <input size="20" maxlength="24"
+                                                      id="et"></td>
+        </tr>
+
+        <tr>
+            <td>Number of scroll events fired</td>
+
+            <td align="center"><input size="4" maxlength="4" id=
+                    "ScrollEvents"></td>
+        </tr>
+
+        <tr id="trMouseWheelRoll">
+            <td>Number of mousewheel roll events fired</td>
+
+            <td align="center"><input size="4" maxlength="4" id=
+                    "MouseWheelRollEvents"></td>
+        </tr>
+
+        <tr id="trmwDistanceDirection">
+            <td id="tmw">Distance and direction rolled by the mousewheel<br>
+                <img src="../GRAPHICS/PNG/MSIE6_16x16.png" title=
+                        "Internet Explorer 6 only" alt="Internet Explorer 6 only" class=
+                             "IconCompat"> 6 only <span class=
+                                                                "Explorer">event.wheelDelta</span></td>
+
+            <td align="center"><input size="4" maxlength="4" id="mw"></td>
+        </tr>
+
+        <tr>
+            <td id="tdbsl"><span class=
+                                         "Netscape6">document.body.scrollLeft</span></td>
+
+            <td align="center"><input size="4" maxlength="4" id="dbsl"></td>
+        </tr>
+
+        <tr>
+            <td id="tdbst"><span class=
+                                         "Netscape6">document.body.scrollTop</span></td>
+
+            <td align="center"><input size="4" maxlength="4" id="dbst"></td>
+        </tr>
+
+        <tr id="trwsx">
+            <td id="twsx"><span class="Netscape6">window.scrollX</span></td>
+
+            <td align="center"><input size="4" maxlength="4" id="wsx"></td>
+        </tr>
+
+        <tr id="trwsy">
+            <td id="twsy"><span class="Netscape6">window.scrollY</span></td>
+
+            <td align="center"><input size="4" maxlength="4" id="wsy"></td>
+        </tr>
+    </table>
+</form>
 </body>
 <script src="test.js" ></script>
 </html>
