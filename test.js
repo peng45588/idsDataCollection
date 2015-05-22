@@ -2,27 +2,23 @@
  * Created by Administrator on 2015/5/20.
  */
 
-window.onload = function(){
-    out4.innerHTML =getBrowserinfo();
-    out4.innerHTML +=checkOs();
-    out4.innerHTML +=getPageInfo();
-    test.innerHTML = "snow";
-};
+
 
 var out1 = document.getElementById("mousemove");
 var out2 = document.getElementById("mouseclick");
 var out3 = document.getElementById("mousesite");
-var out4 = document.getElementById("os");
+var os = document.getElementById("os");
 var out5 = document.getElementById("mousebound");
+//TODO 暂时用来存储数据的控件，待改进 //要添加的例子：$test.data("snow",ss);$test.data(storeEnterPage);
+var $test = $("#test");
+var i = 0;//用于存储key值的区分   key的设置为"operate"+i
 
 
 /**检查浏览器信息 PZ 15-5-20
  *
  */
 function getBrowserinfo(){
-    var browser = navigator.appName;
-    var browserVersion = parseFloat(navigator.appVersion);
-    return "浏览器名称:"+browser+","+"浏览器版本:"+ browserVersion;
+   return {browser:navigator.appName,browserVersion:parseFloat(navigator.appVersion)};
 }
 /**检查OS PZ 15-5-20
  *
@@ -37,16 +33,17 @@ function checkOs(){
     else if(mac) osType = "Apple mac";
     else if(linux) osType = "Linux";
     else if(unix) osType = "Unix";
-    return ",OS："+osType;
+    return osType;
 }
 /**获取页面信息：标题，url，来源url PZ 15-5-20
  *
  */
 function getPageInfo(){
-    var title = document.title;
-    var url = window.location.href;
-    var sourceUrl = document.referrer;//未测试
-    return ",页面标题:"+title+","+"Url:"+ url+","+"来源Url"+sourceUrl;
+    return {
+        title : document.title,
+        url : window.location.href,
+        sourceUrl : document.referrer//未测试
+    };
 }
 /**获取当前时间 PZ 15-5-20
  * 可以根据这个来获取 进入页面的时间、离开页面的时间；example:2015-5-20 15:32:5 ms:680
@@ -59,11 +56,15 @@ function getTime(){
 /**获取按键信息(键值) PZ 15-5-20
  *
  */
-var keyCode;
 document.onkeydown = function(event){
-    keyCode = event.keyCode;
-    var time = getTime();
+    var storeKeyDown = {
+        keyCode : event.keyCode,
+        time : getTime()
+    };
+    $test.data("operate"+i,storeKeyDown);
+    i++;
     //alert("keyCode"+keyCode+"按键时间："+time);
+
 };
 
 /**获取鼠标放置在控件上的时间、控件信息 PZ 15-5-20
@@ -80,7 +81,6 @@ document.body.onmousemove = function(e){
     }else{
         e.srcElement = e.target;
     }
-    out3.innerHTML = "鼠标所在:("+ e.clientX+","+ e.clientY+")";
     //判断是否刚刚进入（即之前并没有在某个控件上），刚刚进入时 需要开始计时
     if(elementForMouseMove==null){
         //alert("start");
@@ -95,17 +95,28 @@ document.body.onmousemove = function(e){
         stopclock();
         var tagName = e.srcElement.tagName;
         elementForMouseMove = e.srcElement;
-        out1.innerHTML = "srcElement=" + tagName +
-            "[" + elementForMouseMove.id + "],时间为：" + t + ",开始时间为"+timeStart;
+        //TODO
+        /**存储用户指针在控件上的时间与控件的信息
+         * 名称解释 {{elementtagName: 如BODY之类的标签, elementId: 标签的ID,
+         *          timeContinue: 指针在控件上持续的时间, time: 指针开始放在控件上的时间}}
+         * @type {{elementtagName: string, elementId: (string|*|u), timeContinue: *, timeStart: *}}
+         */
+        var storeMouseMove  = {
+            elementTagName : tagName,
+            elementId : elementForMouseMove.id,
+            timeContinue : t,
+            time : timeStart
+        }
+        $test.data("operate"+i,storeMouseMove);
+        out1.innerHTML = "srcElement=" +$test.data("operate"+i).elementTagName +"[" + $test.data("operate"+i).elementId
+            + "],时间为：" + $test.data("operate"+i).timeContinue + ",开始时间为"+$test.data("operate"+i).time;
+        i++;
         //重新计时,记录时间
         startclock();
         timeStart = getTime();
     }else{
         //alert("undo"); //进入了这里面就是说鼠标一直在那个控件下，暂时不需要做什么额外的事情
     }
-
-
-
 };
 
 /**鼠标点击事件，获取点击控件信息 PZ 15-5-20
@@ -121,10 +132,39 @@ document.body.onclick = function(e){
     }
     var tagName = e.srcElement.tagName;
     elementForClick = e.srcElement;
-    out2.innerHTML = "点击了:（"+e.clientX + "," + e.clientY + ") srcElement=" + tagName +
-        "[" + elementForClick.id + "]"+",点击时间为"+getTime();
+    var storeClick = {
+        x : e.clientX,
+        y : e.clientY,
+        elementTagName : tagName,
+        elementId : elementForClick.id,
+        time : getTime()
+    };
+    $test.data("operate"+i,storeClick);
+    out2.innerHTML = "点击了:（"+$test.data("operate"+i).x + "," + $test.data("operate"+i).y +
+        ") srcElement=" + $test.data("operate"+i).elementTagName +
+        "[" + $test.data("operate"+i).elementId + "]"+",点击时间为"+$test.data("operate"+i).time;
+    i++;
 };
-
+/**判断鼠标是否在滑动 PZ 15-2-22
+ * 每隔0.1s进行一次判断，若坐标不同则认为在滑动
+ */
+window.setInterval(judgeMouseMove(),100);
+var mouseX1,mouseY1;
+function judgeMouseMove(e){
+    if(mouseX1!= e.clientX||mouseY1!= e.clientY){
+        mouseX1 = e.clientX;
+        mouseY1 = e.clientY;
+        var storeMouseMove = {
+            x : mouseX1,
+            y : mouseY1,
+            time :getTime()
+        };
+        $test.data("operate"+i,storeMouseMove);
+        out3.innerHTML = "鼠标在滑动:("+ $test.data("operate"+i).x+","+ $test.data("operate"+i).y+")"
+            +$test.data("operate"+i).time;
+        i++;
+    }
+}
 /**鼠标拖动选择事件，获取拖动起始点与结束点，以及被选中的范围内的组件 PZ 15-5-20
  *
  */
@@ -145,16 +185,28 @@ document.body.onmouseup = function(e){
     }else{
         e.srcElement = e.target;
     }
-    out5.innerHTML = "起始点:("+downx+","+downy+"),结束点("+ e.clientX+","+ e.clientY;
+    if(downx== e.clientX&&downy== e.clientY){}
+    else {
+        var storeDrag = {
+            xStart : mouseX1,
+            yStart : mouseY1,
+            xEnd : e.clientX,
+            yEnd : e.clientY,
+            time :getTime()
+        };
+        $test.data("operate"+i,storeDrag);
+        out5.innerHTML = "起始点:(" + $test.data("operate"+i).xStart + "," + $test.data("operate"+i).yStart
+            + "),结束点(" + $test.data("operate"+i).xEnd + "," + $test.data("operate"+i).yEnd
+            +",time:"+$test.data("operate"+i).time;
+        i++;
+    }
     //TODO 怎么获取坐标范围内的控件
 };
-/**鼠标滚轮事件 PZ 15-2-22
+
+
+/**鼠标滚轮事件及form值的显示 PZ 15-2-22
  *
  */
-window.onscroll = function(){
-
-}
-
 var NumberOfMouseWheelRollEvents = 0; var NumberOfScrollEvents = 0;
 function ScrollingDetected(evt)
 {
@@ -192,7 +244,7 @@ function ScrollingDetected(evt)
          */
         document.getElementById("dbsl").value = document.body.scrollLeft ;
         document.getElementById("dbst").value = document.body.scrollTop ;
-    };
+    }
     document.getElementById("ScrollEvents").value = ++NumberOfScrollEvents;
     document.getElementById("et").value = TheEventObject.type;
 }
@@ -209,7 +261,7 @@ function MouseWheelRollingDetected(evt) {
         else {
             DirectionUpOrDown = " \u2193 ";
         }
-        ;
+
     }
     else if (evt.detail) {
         if (evt.detail < 0) {
@@ -223,22 +275,39 @@ function MouseWheelRollingDetected(evt) {
         {
             DirectionUpOrDown = " \u2193 ";
         }
-        ;
+
     }
-    ;
+
     document.getElementById("et").value = DirectionUpOrDown + TheEventObject.type + DirectionUpOrDown;
 }
 function init()
 {
     document.getElementById("et").value = "load";
+    //TODO 存储os到data，并打出alert提示存入
+    os.innerHTML = getBrowserinfo() + checkOs() ;
+    var storeEnterPage = {
+        browser:getBrowserinfo().browser,
+        browserVersion:getBrowserinfo().browserVersion,
+        OS:checkOs(),
+        title : getPageInfo().title,
+        url : getPageInfo().url,
+        sourceUrl : getPageInfo().sourceUrl  //未测试
+        };
 
-    /*
-     ================================================
-     Rolling the mouse wheel:
-     associating a recording function to the event
-     ================================================
-     */
 
+    $test.data(storeEnterPage);
+    os.innerHTML = "已存入：\r\nbrowser:"+$test.data("browser")+"\r\nbrowserVersion:"+$test.data("browserVersion")
+        +"\r\nOS:"+$test.data("OS")+"\r\ntitle:"+$test.data("title")+"\r\nurl:"+$test.data("url")
+        +"\r\nsourceUrl:"+$test.data("sourceUrl");
+
+    //var obj = {
+    //    name: "张三",
+    //    age: 18,
+    //    score: [87, 23, 56],
+    //    options: { gender: "男", address: "水帘洞" }
+    //};
+    //$test.data("testobj",obj);
+    //out2.innerHTML = "snow:"+$test.data("testobj").name;
     if("onmousewheel" in document) // MSIE 6, MSIE 7, MSIE 8 and Safari 3+
     {
         document.onmousewheel = MouseWheelRollingDetected;
@@ -255,14 +324,14 @@ function init()
         else
         {
             document.getElementById("trmwDistanceDirection").style.display = "none";
-        };
+        }
         // and then we register the rolling of the mousewheel event accordingly
         if(window.addEventListener)
         {
             window.addEventListener("DOMMouseScroll", MouseWheelRollingDetected, false);
             // Gecko-based browsers and Konqueror 4.x support DOMMouseScroll event
-        };
-    };
+        }
+    }
 
     /*
      ================================================
@@ -282,7 +351,7 @@ function init()
     else if(document.documentElement.onmousemove)
     {
         document.documentElement.onmousemove = MouseMoves;
-    };
+    }
 
     /*
      ================================================
@@ -302,18 +371,18 @@ function init()
     else if("onscroll" in self) // MSIE 6, 7 and MSIE 8
     {
         self.onscroll = ScrollingDetected;
-    };
+    }
 
     if(typeof window.pageXOffset != "number")//typeof 用来检测给定变量的数据类型
     {
         document.getElementById("trwpxo").style.display = "none";
         document.getElementById("trwpyo").style.display = "none";
-    };
+    }
     if(typeof window.scrollX != "number")
     {
         document.getElementById("trwsx").style.display = "none";
         document.getElementById("trwsy").style.display = "none";
-    };
+    }
 }
 
 function MouseMoves(evt)
@@ -325,7 +394,7 @@ function MouseMoves(evt)
     else if (window.event)
     {
         document.getElementById("ct").value = event.srcElement.nodeName;
-    };
+    }
 }
 
 
@@ -343,3 +412,8 @@ function second(){
 function startclock(){se=setInterval("second()",1);}
 //function pauseclock(){clearInterval(se);}
 function stopclock(){clearInterval(se);t=h+"时"+m+"分"+s+"秒"+ss+"毫秒";ss=1;m=h=s=0;}
+
+
+/**设置返回数据类型
+ *
+ */
