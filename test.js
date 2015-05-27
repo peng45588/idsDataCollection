@@ -2,13 +2,12 @@
  * Created by Administrator on 2015/5/20.
  */
 
-
-
-var out1 = document.getElementById("mousemove");
-var out2 = document.getElementById("mouseclick");
-var out3 = document.getElementById("mousesite");
+var mousemoveout = document.getElementById("mousemove");
+var mouseclickout = document.getElementById("mouseclick");
+var mousesiteout = document.getElementById("mousesite");
+var keycodeout = document.getElementById("keycode");
 var os = document.getElementById("os");
-var out5 = document.getElementById("mousebound");
+var mouseboundout = document.getElementById("mousebound");
 //TODO 暂时用来存储数据的控件，待改进 //要添加的例子：$test.data("snow",ss);$test.data(storeEnterPage);
 window.$test = $("#test");
 var i = 0;//用于存储key值的区分   key的设置为"operate"+i
@@ -56,16 +55,17 @@ function getTime(){
 /**获取按键信息(键值) PZ 15-5-20
  *
  */
-document.onkeydown = function(event){
+function KeyDown(event){
     var storeKeyDown = {
         keyCode : event.keyCode,
         time : getTime()
     };
     $test.data("operate"+i,storeKeyDown);
+    keycodeout.innerHTML=("KeyCode:"+$test.data("operate"+i).keyCode+","+$test.data("operate"+i).time);
     i++;
     //alert("keyCode"+keyCode+"按键时间："+time);
 
-};
+}
 
 /**获取鼠标放置在控件上的时间、控件信息 PZ 15-5-20
  *
@@ -99,16 +99,15 @@ function MouseMove(e){
         /**存储用户指针在控件上的时间与控件的信息
          * 名称解释 {{elementtagName: 如BODY之类的标签, elementId: 标签的ID,
          *          timeContinue: 指针在控件上持续的时间, time: 指针开始放在控件上的时间}}
-         * @type {{elementtagName: string, elementId: (string|*|u), timeContinue: *, timeStart: *}}
          */
         var storeMouseMove  = {
             elementTagName : tagName,
             elementId : elementForMouseMove.id,
             timeContinue : t,
             time : timeStart
-        }
+        };
         $test.data("operate"+i,storeMouseMove);
-        out1.innerHTML = "srcElement=" +$test.data("operate"+i).elementTagName +"[" + $test.data("operate"+i).elementId
+        mousemoveout.innerHTML = "srcElement=" +$test.data("operate"+i).elementTagName +"[" + $test.data("operate"+i).elementId
             + "],时间为：" + $test.data("operate"+i).timeContinue + ",开始时间为"+$test.data("operate"+i).time;
         i++;
         //重新计时,记录时间
@@ -117,7 +116,7 @@ function MouseMove(e){
     }else{
         //alert("undo"); //进入了这里面就是说鼠标一直在那个控件下，暂时不需要做什么额外的事情
     }
-};
+}
 
 /**鼠标点击事件，获取点击控件信息 PZ 15-5-20
  *
@@ -140,11 +139,11 @@ function Click(e){
         time : getTime()
     };
     $test.data("operate"+i,storeClick);
-    out2.innerHTML = "点击了:（"+$test.data("operate"+i).x + "," + $test.data("operate"+i).y +
+    mouseclickout.innerHTML = "点击了:（"+$test.data("operate"+i).x + "," + $test.data("operate"+i).y +
         ") srcElement=" + $test.data("operate"+i).elementTagName +
         "[" + $test.data("operate"+i).elementId + "]"+",点击时间为"+$test.data("operate"+i).time;
     i++;
-};
+}
 /**判断鼠标是否在滑动 PZ 15-2-22
  * 每隔0.1s进行一次判断，若坐标不同则认为在滑动
  */
@@ -160,7 +159,7 @@ function judgeMouseMove(e){
             time :getTime()
         };
         $test.data("operate"+i,storeMouseMove);
-        out3.innerHTML = "鼠标在滑动:("+ $test.data("operate"+i).x+","+ $test.data("operate"+i).y+")"
+        mousesiteout.innerHTML = "鼠标在滑动:("+ $test.data("operate"+i).x+","+ $test.data("operate"+i).y+")"
             +$test.data("operate"+i).time;
         i++;
     }
@@ -168,7 +167,7 @@ function judgeMouseMove(e){
 /**鼠标拖动选择事件，获取拖动起始点与结束点，以及被选中的范围内的组件 PZ 15-5-20
  *
  */
-var downx,downy;
+var downx = 0,downy = 0;
 function MouseDown(e){
     //兼容ie firefox chrome
     if(!e){
@@ -177,7 +176,7 @@ function MouseDown(e){
         e.srcElement = e.target;
     }
     downx = e.clientX;downy = e.clientY;
-};
+}
 function MouseUp(e){
     //兼容ie firefox chrome
     //alert(s);
@@ -189,20 +188,20 @@ function MouseUp(e){
     if(downx== e.clientX&&downy== e.clientY){}
     else {
         var storeDrag = {
-            xStart : mouseX1,
-            yStart : mouseY1,
+            xStart : downx,
+            yStart : downy,
             xEnd : e.clientX,
             yEnd : e.clientY,
             time :getTime()
         };
         $test.data("operate"+i,storeDrag);
-        out5.innerHTML = "起始点:(" + $test.data("operate"+i).xStart + "," + $test.data("operate"+i).yStart
-            + "),结束点(" + $test.data("operate"+i).xEnd + "," + $test.data("operate"+i).yEnd
+        mouseboundout.innerHTML = "起始点:(" + $test.data("operate"+i).xStart + "," + $test.data("operate"+i).yStart
+            + "),结束点(" + $test.data("operate"+i).xEnd + ")," + $test.data("operate"+i).yEnd
             +",time:"+$test.data("operate"+i).time;
         i++;
     }
     //TODO 怎么获取坐标范围内的控件
-};
+}
 
 
 /**鼠标滚轮事件及form值的显示 PZ 15-2-22
@@ -247,6 +246,7 @@ function ScrollingDetected(evt)
         document.getElementById("dbsl").value = document.body.scrollLeft ;
         document.getElementById("dbst").value = document.body.scrollTop ;
     }
+
     document.getElementById("ScrollEvents").value = ++NumberOfScrollEvents;
     document.getElementById("et").value = TheEventObject.type;
 }
@@ -340,6 +340,7 @@ function init()
         window.addEventListener("click", Click, true);
         window.addEventListener("mousedown", MouseDown, true);
         window.addEventListener("mouseup", MouseUp, true);
+        window.addEventListener("keydown", KeyDown, true);
     }
     else if(window.onmousemove)
     {
@@ -347,6 +348,7 @@ function init()
         window.onclick = Click;
         window.onmousedown = MouseDown;
         window.onmouseup = MouseUp;
+        window.onkeydown = KeyDown;
     }
     else if(document.documentElement.onmousemove)
     {
@@ -354,6 +356,7 @@ function init()
         document.documentElement.onclick = Click;
         document.documentElement.onmousedown = MouseDown;
         document.documentElement.onmouseup = MouseUp;
+        document.documentElement.onkeydown = KeyDown;
     }
 
     /*
