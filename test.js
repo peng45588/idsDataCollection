@@ -74,7 +74,7 @@ document.onkeydown = function(event){
  * time:当前时间
  */
 var elementForMouseMove = null;var timeStart;
-document.body.onmousemove = function(e){
+function MouseMove(e){
     //兼容ie firefox chrome
     if(!e){
         e = window.event;
@@ -123,7 +123,7 @@ document.body.onmousemove = function(e){
  *
  */
 var elementForClick = null;
-document.body.onclick = function(e){
+function Click(e){
     //兼容ie firefox chrome
     if(!e){
         e = window.event;
@@ -169,7 +169,7 @@ function judgeMouseMove(e){
  *
  */
 var downx,downy;
-document.body.onmousedown = function(e){
+function MouseDown(e){
     //兼容ie firefox chrome
     if(!e){
         e = window.event;
@@ -178,7 +178,7 @@ document.body.onmousedown = function(e){
     }
     downx = e.clientX;downy = e.clientY;
 };
-document.body.onmouseup = function(e){
+function MouseUp(e){
     //兼容ie firefox chrome
     if(!e){
         e = window.event;
@@ -207,7 +207,8 @@ document.body.onmouseup = function(e){
 /**鼠标滚轮事件及form值的显示 PZ 15-2-22
  *
  */
-var NumberOfMouseWheelRollEvents = 0; var NumberOfScrollEvents = 0;
+var NumberOfMouseWheelRollEvents = 0;
+var NumberOfScrollEvents = 0;
 function ScrollingDetected(evt)
 {
     var TheEventObject = evt || event;
@@ -284,7 +285,8 @@ function init()
 {
     document.getElementById("et").value = "load";
     //TODO 存储os到data，并打出alert提示存入
-    os.innerHTML = getBrowserinfo() + checkOs() ;
+    var $test = $("#test");
+    os.innerHTML = getBrowserinfo();
     var storeEnterPage = {
         browser:getBrowserinfo().browser,
         browserVersion:getBrowserinfo().browserVersion,
@@ -300,14 +302,6 @@ function init()
         +"\r\nOS:"+$test.data("OS")+"\r\ntitle:"+$test.data("title")+"\r\nurl:"+$test.data("url")
         +"\r\nsourceUrl:"+$test.data("sourceUrl");
 
-    //var obj = {
-    //    name: "张三",
-    //    age: 18,
-    //    score: [87, 23, 56],
-    //    options: { gender: "男", address: "水帘洞" }
-    //};
-    //$test.data("testobj",obj);
-    //out2.innerHTML = "snow:"+$test.data("testobj").name;
     if("onmousewheel" in document) // MSIE 6, MSIE 7, MSIE 8 and Safari 3+
     {
         document.onmousewheel = MouseWheelRollingDetected;
@@ -342,15 +336,24 @@ function init()
 
     if(window.addEventListener)
     {
-        window.addEventListener("mousemove", MouseMoves, true);
+        window.addEventListener("mousemove", MouseMove, true);
+        window.addEventListener("click", Click, true);
+        window.addEventListener("mousedown", MouseDown, true);
+        window.addEventListener("mouseup", MouseUp, true);
     }
     else if(window.onmousemove)
     {
-        window.onmousemove = MouseMoves;
+        window.onmousemove = MouseMove;
+        window.onclick = Click;
+        window.onmousedown = MouseDown;
+        window.onmouseup = MouseUp;
     }
     else if(document.documentElement.onmousemove)
     {
-        document.documentElement.onmousemove = MouseMoves;
+        document.documentElement.onmousemove = MouseMove;
+        document.documentElement.onclick = Click;
+        document.documentElement.onmousedown = MouseDown;
+        document.documentElement.onmouseup = MouseUp;
     }
 
     /*
@@ -385,17 +388,6 @@ function init()
     }
 }
 
-function MouseMoves(evt)
-{
-    if(window.addEventListener)
-    {
-        document.getElementById("ct").value = evt.target.nodeName;
-    }
-    else if (window.event)
-    {
-        document.getElementById("ct").value = event.srcElement.nodeName;
-    }
-}
 
 
 
