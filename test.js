@@ -5,7 +5,7 @@ document.body.onload = function(){
 
     document.forms[0].reset();
     init();
-};
+}; 
 var mousemoveout = document.getElementById("mousemove");
 var mouseclickout = document.getElementById("mouseclick");
 var mousesiteout = document.getElementById("mousesite");

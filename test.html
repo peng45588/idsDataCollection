@@ -22,8 +22,7 @@
         }
     </style>
 </head>
-<body onload="document.forms[0].reset(); init();">
-<button id="test">snow</button>
+<body>
 <h3 id = "out1">该文本用于显示OS等信息</h3>
 <h3 id = "out2">该文本用于显示mousemove</h3>
 <h3 id = "out3">该文本用于显示mouseclick</h3>
@@ -83,19 +82,23 @@
 
         <tr>
             <td><span>用于显示指针在控件上的时间与控件的信息</span></td>
-            <td align="center"><textarea id="mousemove" cols="30"></textarea></td>
+            <td align="center"><textarea id="mousemove" cols="30" rows="4"></textarea></td>
         </tr>
         <tr>
             <td><span>用于显示指针点击控件上的时间与控件的信息</span></td>
-            <td align="center"><textarea id="mouseclick" cols="30"></textarea></td>
+            <td align="center"><textarea id="mouseclick" cols="30" rows="3"></textarea></td>
         </tr>
         <tr>
             <td><span>用于显示当前指针位置</span></td>
             <td align="center"><span id="mousesite"></span></td>
         </tr>
         <tr>
+        <td><span>用于显示当前按键</span></td>
+        <td align="center"><span id="keycode"></span></td>
+    </tr>
+        <tr>
             <td><span>用于显示鼠标选中框的范围</span></td>
-            <td align="center"><textarea id="mousebound" cols="30"></textarea></td>
+            <td align="center"><textarea id="mousebound" cols="30" rows="3"></textarea></td>
         </tr>
         <tr>
             <td id="twpxo"><span class=
@@ -146,7 +149,7 @@
 
         <tr id="trmwDistanceDirection">
             <td id="tmw">Distance and direction rolled by the mousewheel<br>
-                <img src="../GRAPHICS/PNG/MSIE6_16x16.png" title=
+                <img title=
                         "Internet Explorer 6 only" alt="Internet Explorer 6 only" class=
                              "IconCompat"> 6 only <span class=
                                                                 "Explorer">event.wheelDelta</span></td>
