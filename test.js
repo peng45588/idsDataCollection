@@ -1,7 +1,11 @@
 /**
  * Created by Administrator on 2015/5/20.
  */
+document.body.onload = function(){
 
+    document.forms[0].reset();
+    init();
+};
 var mousemoveout = document.getElementById("mousemove");
 var mouseclickout = document.getElementById("mouseclick");
 var mousesiteout = document.getElementById("mousesite");
@@ -9,7 +13,8 @@ var keycodeout = document.getElementById("keycode");
 var os = document.getElementById("os");
 var mouseboundout = document.getElementById("mousebound");
 //TODO 暂时用来存储数据的控件，待改进 //要添加的例子：$test.data("snow",ss);$test.data(storeEnterPage);
-window.$test = $("#test");
+
+window.$test = $("body");
 var i = 0;//用于存储key值的区分   key的设置为"operate"+i
 
 
@@ -17,7 +22,11 @@ var i = 0;//用于存储key值的区分   key的设置为"operate"+i
  *
  */
 function getBrowserinfo(){
-   return {browser:navigator.appName,browserVersion:parseFloat(navigator.appVersion)};
+   return {
+       browserCodeName:navigator.appCodeName,
+       browserName:navigator.appName,
+       browserVersion:parseFloat(navigator.appVersion)
+   };
 }
 /**检查OS PZ 15-5-20
  *
@@ -32,6 +41,7 @@ function checkOs(){
     else if(mac) osType = "Apple mac";
     else if(linux) osType = "Linux";
     else if(unix) osType = "Unix";
+    else osType = "UnKnow";
     return osType;
 }
 /**获取页面信息：标题，url，来源url PZ 15-5-20
@@ -288,7 +298,8 @@ function init()
     //TODO 存储os到data，并打出alert提示存入
     os.innerHTML = getBrowserinfo();
     var storeEnterPage = {
-        browser:getBrowserinfo().browser,
+        browserCodeName:getBrowserinfo().browserCodeName,
+        browserName:navigator.appName,
         browserVersion:getBrowserinfo().browserVersion,
         OS:checkOs(),
         title : getPageInfo().title,
@@ -298,7 +309,9 @@ function init()
 
 
     $test.data(storeEnterPage);
-    os.innerHTML = "已存入：\r\nbrowser:"+$test.data("browser")+"\r\nbrowserVersion:"+$test.data("browserVersion")
+    os.innerHTML = "已存入：\r\nbrowser:"+$test.data("browserCodeName")+
+        "\r\nbrowserName:"+$test.data("browserName")+
+        "\r\nbrowserVersion:"+$test.data("browserVersion")
         +"\r\nOS:"+$test.data("OS")+"\r\ntitle:"+$test.data("title")+"\r\nurl:"+$test.data("url")
         +"\r\nsourceUrl:"+$test.data("sourceUrl");
 
