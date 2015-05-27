@@ -10,7 +10,7 @@ var out3 = document.getElementById("mousesite");
 var os = document.getElementById("os");
 var out5 = document.getElementById("mousebound");
 //TODO 暂时用来存储数据的控件，待改进 //要添加的例子：$test.data("snow",ss);$test.data(storeEnterPage);
-var $test = $("#test");
+window.$test = $("#test");
 var i = 0;//用于存储key值的区分   key的设置为"operate"+i
 
 
@@ -180,6 +180,7 @@ function MouseDown(e){
 };
 function MouseUp(e){
     //兼容ie firefox chrome
+    //alert(s);
     if(!e){
         e = window.event;
     }else{
@@ -285,7 +286,6 @@ function init()
 {
     document.getElementById("et").value = "load";
     //TODO 存储os到data，并打出alert提示存入
-    var $test = $("#test");
     os.innerHTML = getBrowserinfo();
     var storeEnterPage = {
         browser:getBrowserinfo().browser,
